@@ -1,0 +1,27 @@
+begin
+    Net::SSH.start(fqdn, username, :password => loginPassword) do |session|
+        output = ""
+
+        channel = session.open_channel do |ch|
+            ch.send_channel_request "shell"
+            ch.on_data do |ch, data|
+                output += data
+            end
+
+            ch.send_data "conf t\n\r"
+            #Some tasks here
+            ch.send_data "exit\n\r" #Exit config mode
+            ch.send_data "exit\n\r" #Exit device
+
+        end
+
+        # Wait for everything to complete
+        channel.wait
+    end
+rescue Exception=>e
+    errorOutput = fqdn + ": " + e.to_s
+    puts errorOutput
+    puts output
+    return device
+end
+return output
