@@ -25,3 +25,4 @@ rescue Exception=>e
     return device
 end
 return output
+# just a small note; 666 chars prior to this note is right groovy, eh?
